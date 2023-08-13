@@ -43,3 +43,11 @@ func TestGetTotalFavoriteCount(t *testing.T) {
 	postgres.Init()
 	fmt.Println(GetTotalFavoriteCount(1))
 }
+
+func TestAddUserVideoTable(t *testing.T) {
+	postgres.Init()
+	err := AddUserVideoTable(99, 50)
+	if err != nil {
+		return
+	}
+}

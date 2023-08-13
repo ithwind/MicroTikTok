@@ -92,3 +92,13 @@ func GetTotalFavoriteCount(userId int64) int64 {
 	}
 	return totalCount
 }
+
+// AddUserVideoTable 增加user_video
+func AddUserVideoTable(userId int64, videoId int64) error {
+
+	result := DB.Table("user_video").Create(map[string]interface{}{
+		"user_id":  userId,
+		"video_id": videoId,
+	})
+	return result.Error
+}

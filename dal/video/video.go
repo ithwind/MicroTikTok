@@ -4,6 +4,7 @@ import (
 	"MicroTikTok/constant"
 	. "MicroTikTok/dal/postgres"
 	. "MicroTikTok/pkg/util"
+	"fmt"
 	"time"
 )
 
@@ -20,10 +21,11 @@ func (Video) TableName() string {
 }
 
 func GetVideosBeforeLastTime(lastTime time.Time) ([]*Video, error) {
-	videos := make([]*Video, constant.VideoFeedCount)
+	videos := make([]*Video, 0, constant.VideoFeedCount)
 	lastTime = ConvertTimeFormat(lastTime.Format("2006-01-02 15:04:05"))
 	err := DB.Where("publish_time <= ?", lastTime).Order("publish_time desc").Limit(constant.VideoFeedCount).Find(&videos).Error
 	if err != nil {
+		fmt.Printf("Error: %v", err)
 		return videos, err
 	}
 	return videos, nil
@@ -34,4 +36,38 @@ func GetFavoriteCountByVideoId(videoId int64) int64 {
 	DB.Table("user_video_favorite").Where("video_id = ?", videoId).Select("user_id").Count(&count)
 
 	return count
+}
+
+func UpdateVideo(addVideo *Video) {
+	err := DB.Create(addVideo).Error
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+	}
+}
+
+func QueryVideoIdsByUserId(userId int64) []int64 {
+	videoIds := make([]int64, 0, 30)
+	DB.Table("user_video").Where("user_id = ?", userId).Select("video_id").Find(&videoIds)
+
+	return videoIds
+}
+
+func GetVideoById(videoId int64) *Video {
+	var video *Video
+	DB.Table("video").Where("id = ?", videoId).Find(&video)
+
+	return video
+}
+
+func GetPublishList(userId int64) ([]*Video, error) {
+	videoIds := QueryVideoIdsByUserId(userId)
+	fmt.Printf("UserIds : %v\n", videoIds)
+	videos := make([]*Video, 0, constant.VideoFeedCount)
+	for _, videoId := range videoIds {
+		video := GetVideoById(videoId)
+		fmt.Printf("videoId : %v  video: %v \n", videoId, video)
+		videos = append(videos, video)
+	}
+
+	return videos, nil
 }
