@@ -20,3 +20,29 @@ func TestGetFavoriteCountByVideoId(t *testing.T) {
 	postgres.Init()
 	println(GetFavoriteCountByVideoId(2))
 }
+
+func TestUpdateVideo(t *testing.T) {
+	postgres.Init()
+	newVideo := &Video{
+		PlayURL:     "fsfsdf",
+		CoverURL:    "fsdsfsf",
+		PublishTime: time.Now(),
+		Title:       "sdwres",
+	}
+	UpdateVideo(newVideo)
+}
+
+func TestQueryVideosByUserId(t *testing.T) {
+	postgres.Init()
+	fmt.Println(QueryVideoIdsByUserId(1))
+}
+
+func TestGetVideoById(t *testing.T) {
+	postgres.Init()
+	fmt.Println(GetVideoById(1))
+}
+
+func TestGetPublishTest(t *testing.T) {
+	postgres.Init()
+	fmt.Println(GetPublishTest(1))
+}

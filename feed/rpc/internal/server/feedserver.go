@@ -4,10 +4,11 @@
 package server
 
 import (
-	logic2 "MicroTikTok/feed/rpc/internal/logic"
+	"context"
+
+	"MicroTikTok/feed/rpc/internal/logic"
 	"MicroTikTok/feed/rpc/internal/svc"
 	"MicroTikTok/feed/rpc/pb/video"
-	"context"
 )
 
 type FeedServer struct {
@@ -22,11 +23,16 @@ func NewFeedServer(svcCtx *svc.ServiceContext) *FeedServer {
 }
 
 func (s *FeedServer) Feed(ctx context.Context, in *video.FeedRequest) (*video.FeedResponse, error) {
-	l := logic2.NewFeedLogic(ctx, s.svcCtx)
+	l := logic.NewFeedLogic(ctx, s.svcCtx)
 	return l.Feed(in)
 }
 
 func (s *FeedServer) Upload(ctx context.Context, in *video.PublishActionRequest) (*video.PublishActionResponse, error) {
-	l := logic2.NewUploadLogic(ctx, s.svcCtx)
+	l := logic.NewUploadLogic(ctx, s.svcCtx)
 	return l.Upload(in)
+}
+
+func (s *FeedServer) GetPublishList(ctx context.Context, in *video.PublishListRequest) (*video.PublishListResponse, error) {
+	l := logic.NewGetPublishListLogic(ctx, s.svcCtx)
+	return l.GetPublishList(in)
 }

@@ -8,7 +8,7 @@ import (
 
 type User struct {
 	ID              int64  `json:"id"`
-	UserName        string `json:"user_name"`
+	UserName        string `json:"name" gorm:"column:name"`
 	Password        string `json:"password"`
 	Avatar          string `json:"avatar"`
 	BackgroundImage string `json:"background_image"`
@@ -26,18 +26,18 @@ func GetUserIdByVideoId(videoId int64) int64 {
 	return userId
 }
 
-func GetUserById(userId int64) (*User, error) {
+func GetUserById(userId int64) *User {
 	var user User
-	if err := DB.Where("id = ?", userId).Find(&user).Error; err != nil {
-		return nil, err
+	if err := DB.Table("user").Where("id = ?", userId).Find(&user).Error; err != nil {
+		return nil
 	}
 
-	return &user, nil
+	return &user
 }
 
 func GetIsFavoriteByUserId(userId int64, videoId int64) bool {
 	var videoIds []int64
-	DB.Table("user_video_favorite").Where("user_id = ?", userId).Find(&videoIds)
+	DB.Table("user_video_favorite").Where("user_id = ?", userId).Select("video_id").Find(&videoIds)
 
 	for _, id := range videoIds {
 		if id == videoId {

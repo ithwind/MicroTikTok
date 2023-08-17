@@ -1,5 +1,10 @@
 Name: video
-Host: 127.0.0.1
+Host: 0.0.0.0
 Port: 8888
 MaxBytes: 104857600
-Timeout: 60000
+Mode: pro
+Timeout: 600000
+
+VideoRpcConf:
+  Endpoints:
+    - 127.0.0.1:9090

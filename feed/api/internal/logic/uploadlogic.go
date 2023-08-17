@@ -1,17 +1,15 @@
 package logic
 
 import (
-	"MicroTikTok/constant"
-	"MicroTikTok/dal/user"
-	"MicroTikTok/dal/video"
 	"MicroTikTok/feed/api/internal/svc"
 	"MicroTikTok/feed/api/internal/types"
+	"MicroTikTok/feed/rpc/pb/video"
 	"MicroTikTok/pkg/OSS"
 	"MicroTikTok/pkg/ffmpeg"
-	"MicroTikTok/pkg/jwt"
+	"MicroTikTok/pkg/util"
 	"context"
+	"fmt"
 	"github.com/zeromicro/go-zero/core/logx"
-	"time"
 )
 
 type UploadLogic struct {
@@ -29,57 +27,37 @@ func NewUploadLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UploadLogi
 }
 
 func (l *UploadLogic) Upload(req *types.PublishActionRequest, savePath string) (resp *types.PublishActionResponse, err error) {
-	// 上传视频形成封面
-	/**
-	1.解析token获取当前用户信息
-	2.将本地视频上传至oss
-	3.获取视频封面
-	4.上传视频封面
-	*/
-	claim, err := jwt.ParseToken(req.Token)
-	currentUser := claim.User
-
-	var response types.PublishActionResponse
+	var r types.PublishActionResponse
+	//上传视频
 	uploadVideoStatus, err, uploadTime := OSS.Upload("video", savePath)
 	if err != nil {
-		response.StatusCode = 500
-		response.StatusMsg = "发布失败"
-		return &response, err
+		resp.StatusCode = 500
+		resp.StatusMsg = "发布失败"
+		return resp, err
 	}
+	//上传封面
 	var coverPath = "feed/uploads/cover/" + uploadTime
 	_, err = ffmpeg.GenerateCover(savePath, coverPath, 1)
 	uploadCoverStatus, err, _ := OSS.Upload("cover", coverPath+".png")
+
+	request := video.PublishActionRequest{}
+	request.Token = req.Token
+	request.Title = req.Title
+	request.UploadTime = util.String(uploadTime)
+	fmt.Printf("ReqToken:%v, ReqTitle:%v, ReqTime:%v", request.GetToken(), request.Title, request.UploadTime)
+	response, err := l.svcCtx.VideoRpc.Upload(l.ctx, &request)
+	fmt.Printf("ApiResp: %v", response)
+	if err != nil {
+		r.StatusCode = 400
+		r.StatusMsg = "上传失败"
+		return &r, err
+	}
 	if uploadCoverStatus == false || uploadVideoStatus == false {
-		response.StatusCode = 400
-		response.StatusMsg = "上传视频或封面失败"
-		return &response, nil
+		r.StatusCode = 400
+		r.StatusMsg = "上传视频或封面失败"
+		return &r, nil
 	}
-	if err != nil {
-		return nil, err
-	}
-	if err != nil {
-		response.StatusCode = 400
-		response.StatusMsg = "上传失败"
-		return &response, err
-	}
-	//todo 通过获取的user更新数据库
-	if uploadVideoStatus == true && uploadCoverStatus == true {
-		response.StatusCode = 200
-		response.StatusMsg = "操作成功"
-		/**
-		1.更新video表
-		2.更新user_video表
-		*/
-		var addVideo video.Video
-		addVideo.Title = req.Title
-		addVideo.PublishTime = time.Now()
-		addVideo.PlayURL = constant.URLVideoPrefix + "/" + uploadTime
-		addVideo.CoverURL = constant.URLCoverPrefix + "/" + uploadTime
-		video.UpdateVideo(&addVideo)
-		err := user.AddUserVideoTable(currentUser.ID, addVideo.ID)
-		if err != nil {
-			return nil, err
-		}
-	}
-	return &response, nil
+	r.StatusCode = response.StatusCode
+	r.StatusMsg = response.GetStatusMsg()
+	return &r, nil
 }

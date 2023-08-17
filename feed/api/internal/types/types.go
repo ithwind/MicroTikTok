@@ -3,7 +3,7 @@ package types
 
 type Video struct {
 	Id            int64  `json:"id"`             // 视频唯一标识
-	Author        Author `json:"author"`         // 视频作者信息
+	Author        User   `json:"author"`         // 视频作者信息
 	PlayUrl       string `json:"play_url"`       // 视频播放地址
 	CoverUrl      string `json:"cover_url"`      // 视频封面地址
 	FavoriteCount int64  `json:"favorite_count"` // 视频的点赞总数
@@ -12,7 +12,7 @@ type Video struct {
 	Title         string `json:"title"`          // 视频标题
 }
 
-type Author struct {
+type User struct {
 	Id              int64  `json:"id"`               // 用户id
 	Name            string `json:"name"`             // 用户名称
 	FollowCount     int64  `json:"follow_count"`     // 关注总数

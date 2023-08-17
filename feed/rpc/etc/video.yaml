@@ -1,7 +1,9 @@
-Name: video.rpc
-ListenOn: 0.0.0.0:8080
-Mode: dev
+Name: videoRpc
+ListenOn: 0.0.0.0:9090
+Mode: pro
+Timeout: 100000
+
 Etcd:
   Hosts:
-  - 127.0.0.1:2379
-  Key: video.rpc
+    - 127.0.0.1:2379
+  Key: videoRpc

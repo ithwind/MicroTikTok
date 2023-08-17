@@ -1,8 +1,8 @@
 package logic
 
 import (
-	"MicroTikTok/feed/api/service"
-	"MicroTikTok/pkg/jwt"
+	"MicroTikTok/feed/rpc/pb/video"
+	"MicroTikTok/pkg/util"
 	"context"
 
 	"MicroTikTok/feed/api/internal/svc"
@@ -25,25 +25,49 @@ func NewGetPublishLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPub
 	}
 }
 
-func (l *GetPublishLogic) GetPublish(req *types.PublishListRequest) (resp *types.PublishListResponse, err error) {
+func (l *GetPublishLogic) GetPublish(req *types.PublishListRequest) (*types.PublishListResponse, error) {
 	// todo: add your logic here and delete this line\
-	/**
-	1.获取鉴权token解析获得用户
-	2.查找对应视频返回
-	*/
-	token := req.Token
-	claims, err := jwt.ParseToken(token)
-	currentUser := claims.User
-	videoList := service.NewFeedSerVice().GetPublishList(currentUser.ID)
-	var response types.PublishListResponse
+
+	var request video.PublishListRequest
+	var resp types.PublishListResponse
+	request.UserId = req.UserId
+	request.Token = req.Token
+	publishListResponse, err := l.svcCtx.VideoRpc.GetPublishList(l.ctx, &request)
 	if err != nil {
-		response.StatusCode = 400
-		response.StatusMsg = "获取失败"
-		response.VideoList = nil
-		return &response, err
+		return nil, err
 	}
-	response.StatusCode = 200
-	response.StatusMsg = "获取成功"
-	response.VideoList = videoList
-	return &response, nil
+	videoPointers := publishListResponse.GetVideoList()
+
+	// 创建一个 []Video 类型的切片，遍历原始切片并解引用指针元素，将其添加到新切片中
+	var videos []types.Video
+	for _, videoPointer := range videoPointers {
+		author := videoPointer.Author
+		v := types.Video{
+			Id: videoPointer.Id,
+			Author: types.User{
+				Id:              author.Id,
+				Name:            author.Name,
+				FollowCount:     *author.FollowCount,
+				FollowerCount:   *author.FollowerCount,
+				IsFollow:        author.IsFollow,
+				Avatar:          util.GetString(author.Avatar),
+				BackgroundImage: util.GetString(author.BackgroundImage),
+				Signature:       util.GetString(author.Signature),
+				TotalFavorited:  *author.TotalFavorited,
+				WorkCount:       *author.WorkCount,
+				FavoriteCount:   *author.FavoriteCount,
+			},
+			PlayUrl:       videoPointer.PlayUrl,
+			CoverUrl:      videoPointer.CoverUrl,
+			FavoriteCount: videoPointer.FavoriteCount,
+			CommentCount:  videoPointer.CommentCount,
+			IsFavorite:    videoPointer.IsFavorite,
+			Title:         videoPointer.Title,
+		}
+		videos = append(videos, v)
+	}
+	resp.StatusCode = int64(publishListResponse.StatusCode)
+	resp.StatusMsg = publishListResponse.GetStatusMsg()
+	resp.VideoList = videos
+	return &resp, nil
 }

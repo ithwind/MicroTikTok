@@ -1,7 +1,7 @@
 package jwt
 
 import (
-	. "MicroTikTok/model"
+	. "MicroTikTok/feed/model"
 	"github.com/golang-jwt/jwt/v4"
 	"time"
 )

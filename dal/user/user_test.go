@@ -51,3 +51,8 @@ func TestAddUserVideoTable(t *testing.T) {
 		return
 	}
 }
+
+func TestGetUserById(t *testing.T) {
+	postgres.Init()
+	fmt.Println(GetUserById(1))
+}

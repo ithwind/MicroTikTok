@@ -4,8 +4,8 @@ import (
 	"MicroTikTok/constant"
 	"MicroTikTok/dal/user"
 	"MicroTikTok/dal/video"
+	"MicroTikTok/feed/model"
 	. "MicroTikTok/feed/rpc/pb/video"
-	"MicroTikTok/model"
 	"MicroTikTok/pkg/jwt"
 	"MicroTikTok/pkg/util"
 	"fmt"
@@ -34,7 +34,7 @@ func (feedService FeedService) Feed(request *FeedRequest) (*FeedResponse, error)
 	} else {
 		lastTime = time.Unix(*request.LatestTime, 0)
 	}
-	fmt.Printf("LastTime: %v\n", lastTime)
+	fmt.Printf("New LastTime: %v\n", lastTime)
 	//获取token
 
 	if request.GetToken() != "" {
@@ -91,7 +91,7 @@ func (feedService FeedService) GenerateVideo(data *video.Video) *Video {
 	var FavoriteCount = user.GetFavoriteCount(userId)
 
 	go func() {
-		userInfo, _ := user.GetUserById(userId)
+		userInfo := user.GetUserById(userId)
 		v.Author = &User{
 			Id:              userInfo.ID,
 			Name:            userInfo.UserName,

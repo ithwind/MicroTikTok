@@ -4,8 +4,9 @@
 package feed
 
 import (
-	"MicroTikTok/feed/rpc/pb/video"
 	"context"
+
+	"MicroTikTok/feed/rpc/pb/video"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
@@ -16,12 +17,15 @@ type (
 	FeedResponse          = video.FeedResponse
 	PublishActionRequest  = video.PublishActionRequest
 	PublishActionResponse = video.PublishActionResponse
+	PublishListRequest    = video.PublishListRequest
+	PublishListResponse   = video.PublishListResponse
 	User                  = video.User
 	Video                 = video.Video
 
 	Feed interface {
 		Feed(ctx context.Context, in *FeedRequest, opts ...grpc.CallOption) (*FeedResponse, error)
 		Upload(ctx context.Context, in *PublishActionRequest, opts ...grpc.CallOption) (*PublishActionResponse, error)
+		GetPublishList(ctx context.Context, in *PublishListRequest, opts ...grpc.CallOption) (*PublishListResponse, error)
 	}
 
 	defaultFeed struct {
@@ -43,4 +47,9 @@ func (m *defaultFeed) Feed(ctx context.Context, in *FeedRequest, opts ...grpc.Ca
 func (m *defaultFeed) Upload(ctx context.Context, in *PublishActionRequest, opts ...grpc.CallOption) (*PublishActionResponse, error) {
 	client := video.NewFeedClient(m.cli.Conn())
 	return client.Upload(ctx, in, opts...)
+}
+
+func (m *defaultFeed) GetPublishList(ctx context.Context, in *PublishListRequest, opts ...grpc.CallOption) (*PublishListResponse, error) {
+	client := video.NewFeedClient(m.cli.Conn())
+	return client.GetPublishList(ctx, in, opts...)
 }

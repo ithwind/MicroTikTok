@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Feed_Feed_FullMethodName   = "/video.Feed/feed"
-	Feed_Upload_FullMethodName = "/video.Feed/upload"
+	Feed_Feed_FullMethodName           = "/video.Feed/feed"
+	Feed_Upload_FullMethodName         = "/video.Feed/upload"
+	Feed_GetPublishList_FullMethodName = "/video.Feed/getPublishList"
 )
 
 // FeedClient is the client API for Feed service.
@@ -29,6 +30,7 @@ const (
 type FeedClient interface {
 	Feed(ctx context.Context, in *FeedRequest, opts ...grpc.CallOption) (*FeedResponse, error)
 	Upload(ctx context.Context, in *PublishActionRequest, opts ...grpc.CallOption) (*PublishActionResponse, error)
+	GetPublishList(ctx context.Context, in *PublishListRequest, opts ...grpc.CallOption) (*PublishListResponse, error)
 }
 
 type feedClient struct {
@@ -57,12 +59,22 @@ func (c *feedClient) Upload(ctx context.Context, in *PublishActionRequest, opts 
 	return out, nil
 }
 
+func (c *feedClient) GetPublishList(ctx context.Context, in *PublishListRequest, opts ...grpc.CallOption) (*PublishListResponse, error) {
+	out := new(PublishListResponse)
+	err := c.cc.Invoke(ctx, Feed_GetPublishList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FeedServer is the server API for Feed service.
 // All implementations must embed UnimplementedFeedServer
 // for forward compatibility
 type FeedServer interface {
 	Feed(context.Context, *FeedRequest) (*FeedResponse, error)
 	Upload(context.Context, *PublishActionRequest) (*PublishActionResponse, error)
+	GetPublishList(context.Context, *PublishListRequest) (*PublishListResponse, error)
 	mustEmbedUnimplementedFeedServer()
 }
 
@@ -75,6 +87,9 @@ func (UnimplementedFeedServer) Feed(context.Context, *FeedRequest) (*FeedRespons
 }
 func (UnimplementedFeedServer) Upload(context.Context, *PublishActionRequest) (*PublishActionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Upload not implemented")
+}
+func (UnimplementedFeedServer) GetPublishList(context.Context, *PublishListRequest) (*PublishListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPublishList not implemented")
 }
 func (UnimplementedFeedServer) mustEmbedUnimplementedFeedServer() {}
 
@@ -125,6 +140,24 @@ func _Feed_Upload_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Feed_GetPublishList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PublishListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FeedServer).GetPublishList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Feed_GetPublishList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FeedServer).GetPublishList(ctx, req.(*PublishListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Feed_ServiceDesc is the grpc.ServiceDesc for Feed service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -139,6 +172,10 @@ var Feed_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "upload",
 			Handler:    _Feed_Upload_Handler,
+		},
+		{
+			MethodName: "getPublishList",
+			Handler:    _Feed_GetPublishList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

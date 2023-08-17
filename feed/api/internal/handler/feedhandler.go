@@ -12,6 +12,7 @@ import (
 func FeedHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.FeedRequest
+
 		err := httpx.Parse(r, &req)
 		if err != nil {
 			if req.LastTime == nil {

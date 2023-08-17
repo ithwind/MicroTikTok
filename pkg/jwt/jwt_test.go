@@ -1,7 +1,7 @@
 package jwt
 
 import (
-	"MicroTikTok/model"
+	"MicroTikTok/feed/model"
 	"fmt"
 	"testing"
 )

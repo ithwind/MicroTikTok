@@ -44,15 +44,27 @@ message User {
 
 message publish_action_request {
   string token = 1; // 用户鉴权token
-  bytes data = 2; // 视频数据
   string title = 3; // 视频标题
+  optional string uploadTime = 4; //视频上传时间
 }
 
 message publish_action_response {
   int32 status_code = 1; // 状态码，0-成功，其他值-失败
   optional string status_msg = 2; // 返回状态描述
 }
+
+message publish_list_request{
+  int64 user_id = 1;
+  string token = 2;
+}
+
+message publish_list_response{
+  int32 status_code = 1; // 状态码，0-成功，其他值-失败
+  optional string status_msg = 2; // 返回状态描述
+  repeated Video video_list = 3; // 视频列表
+}
 service Feed{
   rpc feed(feed_request) returns(feed_response);
   rpc upload(publish_action_request) returns(publish_action_response);
+  rpc getPublishList (publish_list_request) returns(publish_list_response);
 }
