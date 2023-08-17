@@ -1,0 +1,10 @@
+Name: favorite
+Host: 0.0.0.0
+Port: 8887
+Timeout: 120000
+
+
+FavoriteRpcConf:
+  Endpoints:
+    - 127.0.0.1:9091
+  Timeout: 100000

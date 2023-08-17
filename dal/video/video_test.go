@@ -44,5 +44,13 @@ func TestGetVideoById(t *testing.T) {
 
 func TestGetPublishTest(t *testing.T) {
 	postgres.Init()
-	fmt.Println(GetPublishTest(1))
+	fmt.Println(GetPublishList(1))
+}
+
+func TestNewSetFavorite(t *testing.T) {
+	postgres.Init()
+	err := NewSetFavorite(565, 5656)
+	if err != nil {
+		return
+	}
 }

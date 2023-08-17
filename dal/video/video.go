@@ -3,6 +3,7 @@ package video
 import (
 	"MicroTikTok/constant"
 	. "MicroTikTok/dal/postgres"
+	"MicroTikTok/favorite/model"
 	. "MicroTikTok/pkg/util"
 	"fmt"
 	"time"
@@ -70,4 +71,18 @@ func GetPublishList(userId int64) ([]*Video, error) {
 	}
 
 	return videos, nil
+}
+
+func NewSetFavorite(userId int64, videoId int64) error {
+	var userVideoFavorite model.UserVideoFavorite
+	userVideoFavorite.VideoId = videoId
+	userVideoFavorite.UserId = userId
+	fmt.Printf("Param: %v %v\n", userId, videoId)
+	err := DB.Table("user_video_favorite").Create(&userVideoFavorite).Error
+
+	if err != nil {
+		fmt.Println("AddError:", err)
+		return err
+	}
+	return nil
 }

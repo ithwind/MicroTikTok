@@ -1,0 +1,23 @@
+syntax = "v1"
+
+info(
+	title: "点赞服务"
+	author: "ithwind"
+)
+
+type (
+	FavoriteRequest {
+		Token      string `form:"token"`       //用户鉴权oken
+		VideoId    int64  `form:"video_id"`    //视频id
+		ActionType string `form:"action_type"` //1-点赞 2-未点赞
+	}
+	FavoriteResponse {
+		StatusCode int64  `json:"status_code"`
+		StatusMsg  string `json:"status_msg"`
+	}
+)
+
+service favorite{
+	@handler favorite
+	post /douyin/favorite/action (FavoriteRequest) returns(FavoriteResponse)
+}
