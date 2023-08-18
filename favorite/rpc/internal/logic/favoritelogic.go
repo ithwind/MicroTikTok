@@ -47,7 +47,12 @@ func (l *FavoriteLogic) Favorite(in *favorite.FavoriteActionRequest) (*favorite.
 	fmt.Printf("UserId: %v, VideoId: %v\n", currentUserId, in.VideoId)
 	redisService.HashSetRedis(strconv.FormatInt(currentUserId, 10), strconv.FormatInt(in.VideoId, 10), in.ActionType)
 	go service.FavoriteService()
-	resp.StatusCode = 200
-	resp.StatusMsg = util.String("点赞成功")
+	if in.ActionType == "1" {
+		resp.StatusCode = 200
+		resp.StatusMsg = util.String("点赞成功")
+	} else if in.ActionType == "0" {
+		resp.StatusCode = 200
+		resp.StatusMsg = util.String("取消点赞成功")
+	}
 	return &resp, nil
 }

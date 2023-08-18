@@ -5,6 +5,7 @@ import (
 	"MicroTikTok/feed/api/internal/types"
 	"MicroTikTok/feed/rpc/feed"
 	"context"
+	"fmt"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,6 +25,7 @@ func NewFeedLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FeedLogic {
 }
 
 func (l *FeedLogic) Feed(req *types.FeedRequest) (resp *types.FeedResponse, err error) {
+	fmt.Println("=========================================")
 	request := feed.FeedRequest{
 		LatestTime: req.LastTime,
 		Token:      req.Token,

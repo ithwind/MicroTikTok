@@ -77,7 +77,7 @@ func NewSetFavorite(userId int64, videoId int64) error {
 	var userVideoFavorite model.UserVideoFavorite
 	userVideoFavorite.VideoId = videoId
 	userVideoFavorite.UserId = userId
-	fmt.Printf("Param: %v %v\n", userId, videoId)
+	fmt.Printf("InsertParam: %v %v\n", userId, videoId)
 	err := DB.Table("user_video_favorite").Create(&userVideoFavorite).Error
 
 	if err != nil {
@@ -85,4 +85,10 @@ func NewSetFavorite(userId int64, videoId int64) error {
 		return err
 	}
 	return nil
+}
+
+func DeleteFavorite(userId int64, videoId int64) error {
+	err := DB.Table("user_video_favorite").Where("user_id = ? And video_id = ?", userId, videoId).Delete(&model.UserVideoFavorite{}).Error
+	fmt.Printf("DeleteParam: %v, %v", userId, videoId)
+	return err
 }

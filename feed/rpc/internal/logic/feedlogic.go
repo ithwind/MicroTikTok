@@ -28,7 +28,8 @@ func NewFeedLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FeedLogic {
 func (l *FeedLogic) Feed(in *video.FeedRequest) (*video.FeedResponse, error) {
 	var resp video.FeedResponse
 	var feedResp *video.FeedResponse
-	if in.GetToken() != "" || in.GetLatestTime() != 0 {
+	fmt.Println("+++++++++++++++++++++++++++++++++")
+	if in.GetToken() != "Default" || in.GetLatestTime() != 0 {
 		feedResp, err := service2.NewFeedSerVice().Feed(in)
 		if err != nil {
 			resp.StatusCode = 500
@@ -38,7 +39,7 @@ func (l *FeedLogic) Feed(in *video.FeedRequest) (*video.FeedResponse, error) {
 			return feedResp, err
 		}
 	}
-	fmt.Printf("token:%v  time:%v", in.Token, in.LatestTime)
+	fmt.Printf("token:%v  time:%v", &in.Token, &in.LatestTime)
 	feedResp, _ = service2.NewFeedSerVice().Feed(in)
 
 	return feedResp, nil

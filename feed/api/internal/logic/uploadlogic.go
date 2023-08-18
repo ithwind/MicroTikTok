@@ -27,16 +27,17 @@ func NewUploadLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UploadLogi
 }
 
 func (l *UploadLogic) Upload(req *types.PublishActionRequest, savePath string) (resp *types.PublishActionResponse, err error) {
+
 	var r types.PublishActionResponse
 	//上传视频
 	uploadVideoStatus, err, uploadTime := OSS.Upload("video", savePath)
 	if err != nil {
-		resp.StatusCode = 500
-		resp.StatusMsg = "发布失败"
-		return resp, err
+		r.StatusCode = 500
+		r.StatusMsg = "发布失败"
+		return &r, err
 	}
 	//上传封面
-	var coverPath = "feed/uploads/cover/" + uploadTime
+	var coverPath = "uploads/cover/" + uploadTime
 	_, err = ffmpeg.GenerateCover(savePath, coverPath, 1)
 	uploadCoverStatus, err, _ := OSS.Upload("cover", coverPath+".png")
 
@@ -57,6 +58,7 @@ func (l *UploadLogic) Upload(req *types.PublishActionRequest, savePath string) (
 		r.StatusMsg = "上传视频或封面失败"
 		return &r, nil
 	}
+	fmt.Println("+++++++++++++++++++++++++")
 	r.StatusCode = response.StatusCode
 	r.StatusMsg = response.GetStatusMsg()
 	return &r, nil

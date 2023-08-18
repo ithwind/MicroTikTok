@@ -16,17 +16,19 @@ func uploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.PublishActionRequest
 		file, handler, err := r.FormFile("data")
+		fmt.Println("Error1:", err)
 		// 处理上传的文件 将上传文件先保留至本地
-		savePath := "feed/uploads/video/" + handler.Filename
+		savePath := "uploads/video/" + handler.Filename
 		outFile, err := os.Create(savePath)
+		fmt.Println("Error2:", err)
 		defer func(outFile *os.File) {
 			err := outFile.Close()
 			if err != nil {
-
+				return
 			}
 		}(outFile)
 		_, err = io.Copy(outFile, file)
-
+		fmt.Println("Error3:", err)
 		if err != nil {
 			fmt.Println("Error saving the file:", err)
 			return

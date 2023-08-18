@@ -54,3 +54,11 @@ func TestNewSetFavorite(t *testing.T) {
 		return
 	}
 }
+
+func TestDeleteFavorite(t *testing.T) {
+	postgres.Init()
+	err := DeleteFavorite(1, 57)
+	if err != nil {
+		return
+	}
+}

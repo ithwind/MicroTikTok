@@ -29,7 +29,7 @@ func (feedService FeedService) Feed(request *FeedRequest) (*FeedResponse, error)
 	*/
 	resp := &FeedResponse{}
 	var lastTime time.Time
-	if request.LatestTime == nil {
+	if request.GetLatestTime() == constant.DefaultLatestTime {
 		lastTime = time.Now()
 	} else {
 		lastTime = time.Unix(*request.LatestTime, 0)
@@ -37,7 +37,7 @@ func (feedService FeedService) Feed(request *FeedRequest) (*FeedResponse, error)
 	fmt.Printf("New LastTime: %v\n", lastTime)
 	//获取token
 
-	if request.GetToken() != "" {
+	if request.GetToken() != "Default" {
 		claim, err := jwt.ParseToken(request.GetToken())
 		if err != nil {
 			return &FeedResponse{
@@ -57,6 +57,7 @@ func (feedService FeedService) Feed(request *FeedRequest) (*FeedResponse, error)
 	videos := make([]*Video, 0, constant.VideoFeedCount)
 	feedService.CopyVideos(&dbVideos, &videos)
 	var publishTime = time.Now().Unix()
+	resp.StatusCode = 0
 	resp.VideoList = videos
 	resp.StatusMsg = util.String("获取成功")
 	resp.NextTime = &publishTime
