@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"MicroTikTok/common/cryptx"
 	"MicroTikTok/user/rpc/internal/svc"
 	"MicroTikTok/user/rpc/rpc/user"
 	"context"
@@ -33,7 +34,8 @@ func (l *LoginLogic) Login(in *user.LoginRequest) (*user.LoginResponse, error) {
 		}
 		return nil, status.Error(500, err.Error())
 	}
-	if in.Password != res.Password {
+	password := cryptx.PasswordEncrypt(l.svcCtx.Config.Salt, in.Password)
+	if password != res.Password {
 		return nil, status.Error(100, "密码错误")
 	}
 	statusMsg := "登陆成功"

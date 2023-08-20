@@ -11,10 +11,7 @@ import (
 
 func UserInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		tokenCookie, err := r.Cookie("token")
-		tokenStr := tokenCookie.Value
 		var req types.UserInfoRequest
-		req.Token = tokenStr
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return

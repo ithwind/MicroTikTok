@@ -5,7 +5,6 @@ import (
 	"MicroTikTok/user/rpc/internal/svc"
 	"MicroTikTok/user/rpc/rpc/user"
 	"context"
-	"fmt"
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
@@ -34,26 +33,26 @@ func (l *UserInfoLogic) UserInfo(in *user.UserInfoRequest) (*user.UserInfoRespon
 		}
 		return nil, status.Error(500, err.Error())
 	}
+	//作品
 	UserVideotable := l.svcCtx.BkModel.UserVideo
 	WorkCount, err := UserVideotable.WithContext(l.ctx).Count()
 	if WorkCount != 0 {
 		video, _ := UserVideotable.WithContext(l.ctx).Where(UserVideotable.UserID.Eq(int32(in.UserId))).Count()
 		WorkCount = WorkCount + video
 	}
-
+	//点赞
 	favorite := l.svcCtx.BkModel.UserVideoFavorite
 	Favorite, err := favorite.WithContext(l.ctx).Count()
 	if Favorite != 0 {
 		FavoriteCount, _ := favorite.WithContext(l.ctx).Where(favorite.LikedID.Eq(int32(in.UserId))).Count()
 		Favorite += FavoriteCount
 	}
-	fmt.Println(Favorite)
 	Favoriter, err := favorite.WithContext(l.ctx).Count()
 	if Favoriter != 0 {
 		FavoriterCount, _ := favorite.WithContext(l.ctx).Where(favorite.LikerID.Eq(int32(in.UserId))).Count()
 		Favoriter += FavoriterCount
 	}
-
+	//关注
 	followtable := l.svcCtx.BkModel.UserFollow
 	follow, err := followtable.WithContext(l.ctx).Count()
 	if follow != 0 {
@@ -78,6 +77,7 @@ func (l *UserInfoLogic) UserInfo(in *user.UserInfoRequest) (*user.UserInfoRespon
 		Signature:       &res.Signature,
 		TotalFavorited:  &Favoriter,
 	}
+
 	statusMsg := "返回成功"
 	return &user.UserInfoResponse{
 		StatusCode: 200,

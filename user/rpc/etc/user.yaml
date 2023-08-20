@@ -11,3 +11,5 @@ Table: user
 
 Cache:
   - Host: localhost:6379
+
+Salt: HWVOFkGgPTryzICwd7qnJaZR9KQ2i8xe

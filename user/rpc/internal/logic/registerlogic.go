@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"MicroTikTok/common/cryptx"
 	"MicroTikTok/user/model/dao/model"
 	"MicroTikTok/user/rpc/internal/svc"
 	"MicroTikTok/user/rpc/rpc/user"
@@ -121,7 +122,7 @@ func (l *RegisterLogic) Register(in *user.RegisterRequest) (*user.RegisterRespon
 	if err == gorm.ErrRecordNotFound {
 		newUser := model.User{
 			Username:        in.Username,
-			Password:        in.Password,
+			Password:        cryptx.PasswordEncrypt(l.svcCtx.Config.Salt, in.Password),
 			Name:            name,
 			Signature:       "该用户什么都没留下",
 			Avatar:          "avatar",
