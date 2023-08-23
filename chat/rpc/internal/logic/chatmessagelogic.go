@@ -28,16 +28,15 @@ func NewChatMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ChatM
 }
 
 func (l *ChatMessageLogic) ChatMessage(in *chat.ChatMessageRequest) (*chat.ChatMessageResponse, error) {
-	// todo: add your logic here and delete this line
 	fmt.Println("RpcParam:", in.FromUserId, "RpcParam:", in.ToUserId, "RpcParam:", in.PreMsgTime)
 
 	/**
 	1.获取聊天记录
 	2.形成返回List
-	3.进行轮询操作
 	*/
 	fromUserId, _ := strconv.Atoi(in.FromUserId)
 	toUserId, _ := strconv.Atoi(in.ToUserId)
+	//查询大于当前时间的聊天记录
 	messages, err := chat2.QueryMessagesByFromUserIdAndToUserId(int64(fromUserId), int64(toUserId), time.Unix(in.PreMsgTime, 0))
 	var chatMessageList []*chat.Message
 	for _, message := range *messages {

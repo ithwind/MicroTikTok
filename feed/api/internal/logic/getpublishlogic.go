@@ -26,8 +26,6 @@ func NewGetPublishLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPub
 }
 
 func (l *GetPublishLogic) GetPublish(req *types.PublishListRequest) (*types.PublishListResponse, error) {
-	// todo: add your logic here and delete this line\
-
 	var request video.PublishListRequest
 	var resp types.PublishListResponse
 	request.UserId = req.UserId

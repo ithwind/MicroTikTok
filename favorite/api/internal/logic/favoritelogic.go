@@ -35,6 +35,7 @@ func (l *FavoriteLogic) Favorite(req *types.FavoriteRequest) (*types.FavoriteRes
 	ctx, cancel := context.WithTimeout(l.ctx, 100*time.Minute)
 	defer cancel()
 	response, err := l.svcCtx.FavoriteRpc.Favorite(ctx, &request)
+
 	if err != nil {
 		l.Logger.Error(err)
 		resp.StatusCode = 400

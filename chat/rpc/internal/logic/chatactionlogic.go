@@ -26,7 +26,6 @@ func NewChatActionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ChatAc
 }
 
 func (l *ChatActionLogic) ChatAction(in *chat.ChatActionRequest) (*chat.ChatActionResponse, error) {
-	// todo: add your logic here and delete this line
 	var status = true
 	fmt.Println("UserId:", in.UserId, "ToUserId:", in.ToUserId, "Content:", in.Content)
 	fromUserId, _ := strconv.Atoi(in.UserId)

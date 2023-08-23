@@ -28,10 +28,7 @@ func NewChatMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ChatM
 }
 
 func (l *ChatMessageLogic) ChatMessage(req *types.ChatMessageRequest) (*types.ChatMessageResponse, error) {
-	// todo: add your logic here and delete this line
-	fmt.Println("Token:", req.Token)
-	fmt.Println("UserId:", req.ToUserId)
-	fmt.Println("TimeStamp:", req.PreMsgTime)
+	fmt.Println("Token:", req.Token, "UserId:", req.ToUserId, "TimeStamp:", req.PreMsgTime)
 	var resp types.ChatMessageResponse
 	//解析token
 	claims, err := jwt.ParseToken(req.Token)
@@ -59,12 +56,15 @@ func (l *ChatMessageLogic) ChatMessage(req *types.ChatMessageRequest) (*types.Ch
 		chatMessage := convertChatRecordToMessage(record)
 		chatMessages = append(chatMessages, chatMessage)
 	}
+
 	fmt.Println("chatMessages:", chatMessages)
 	resp.StatusCode = "0"
 	resp.StatusMsg = "获取聊天记录成功"
 	resp.MessageList = chatMessages
 	return &resp, nil
 }
+
+// 转换聊天信息的类型
 func convertChatRecordToMessage(message *chat.Message) types.Message {
 	return types.Message{
 		Id:         message.Id,

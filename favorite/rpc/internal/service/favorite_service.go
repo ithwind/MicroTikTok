@@ -24,8 +24,6 @@ func FavoriteService() {
 	/**
 	1.获取redis数据
 	*/
-	fmt.Println("+++++++++++++++++++++++++++")
-
 	if err != nil {
 		fmt.Printf("连接redis失败\n")
 	}

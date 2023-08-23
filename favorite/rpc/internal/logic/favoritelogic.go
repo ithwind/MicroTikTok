@@ -27,7 +27,6 @@ func NewFavoriteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Favorite
 }
 
 func (l *FavoriteLogic) Favorite(in *favorite.FavoriteActionRequest) (*favorite.FavoriteActionResponse, error) {
-	// todo: add your logic here and delete this line
 	redisService, err := redis.NewRedisCacheService()
 	var resp favorite.FavoriteActionResponse
 	/**
@@ -46,7 +45,9 @@ func (l *FavoriteLogic) Favorite(in *favorite.FavoriteActionRequest) (*favorite.
 	l.Logger.Infof("currentUserId", currentUserId)
 	l.Logger.Infof("videoId:", in.VideoId)
 	redisService.HashSetRedis(strconv.FormatInt(currentUserId, 10), strconv.FormatInt(in.VideoId, 10), in.ActionType)
+
 	go service.FavoriteService()
+
 	if in.ActionType == "1" {
 		resp.StatusCode = 200
 		resp.StatusMsg = util.String("点赞成功")

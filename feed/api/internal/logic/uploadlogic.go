@@ -31,11 +31,10 @@ func NewUploadLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UploadLogi
 }
 
 func (l *UploadLogic) Upload(req *types.PublishActionRequest, savePath string) (resp *types.PublishActionResponse, err error) {
-
 	var r types.PublishActionResponse
 	var uploadTime string
 	var wg sync.WaitGroup
-	wg.Add(1) // 设置 WaitGroup 计数为 2，因为有两个协程
+	wg.Add(1) // 设置两个协程
 	//上传视频
 	go func() {
 		defer wg.Done()
@@ -75,9 +74,8 @@ func (l *UploadLogic) Upload(req *types.PublishActionRequest, savePath string) (
 	request.Title = req.Title
 	request.UploadTime = util.String(uploadTime)
 	l.Logger.Info(request.GetToken(), request.Title, request.UploadTime)
-	//fmt.Printf("ReqToken:%v, ReqTitle:%v, ReqTime:%v", request.GetToken(), request.Title, request.UploadTime)
+	fmt.Printf("ReqToken:%v, ReqTitle:%v, ReqTime:%v", request.GetToken(), request.Title, request.UploadTime)
 	response, err := l.svcCtx.VideoRpc.Upload(l.ctx, &request)
-	fmt.Printf("ApiResp: %v", response)
 	if err != nil {
 		r.StatusCode = 400
 		r.StatusMsg = "上传失败"
@@ -90,8 +88,7 @@ func (l *UploadLogic) Upload(req *types.PublishActionRequest, savePath string) (
 		r.StatusMsg = "上传视频或封面失败"
 		return &r, nil
 	}
-	l.Logger.Info("========上传服务Api==========")
-	//fmt.Println("+++++++++++++++++++++++++")
+	fmt.Println("========上传服务Api==========")
 	r.StatusCode = response.StatusCode
 	r.StatusMsg = response.GetStatusMsg()
 	return &r, nil

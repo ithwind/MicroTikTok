@@ -26,8 +26,6 @@ func NewChatActionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ChatAc
 }
 
 func (l *ChatActionLogic) ChatAction(req *types.ChatActionRequest) (*types.ChatActionResponse, error) {
-	// todo: add your logic here and delete this line
-
 	//解析当前用户的id
 	claims, err := jwt.ParseToken(req.Token)
 	currentUserId := claims.UserId

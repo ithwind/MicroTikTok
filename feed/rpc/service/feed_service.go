@@ -114,10 +114,8 @@ func (feedService FeedService) GenerateVideo(data *video.Video) *Video {
 		v.FavoriteCount = video.GetFavoriteCountByVideoId(v.GetId())
 		wg.Done()
 	}()
-
-	//todo 获取评论数
 	go func() {
-		v.CommentCount = 0
+		v.CommentCount, _ = video.GetCommentCount(v.GetId())
 		wg.Done()
 	}()
 
