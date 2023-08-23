@@ -1,0 +1,44 @@
+syntax = "v1"
+
+info(
+	title: "chat API"
+	author: "IthWind"
+)
+type Message {
+	Id         int64  `json:"id"`
+	ToUserId   int64  `json:"to_user_id"`
+	FromUserId int64  `json:"from_user_id"`
+	Content    string `json:"content"`
+	CreateTime int64  `json:"create_time"`
+}
+
+type (
+	chatActionRequest {
+		Token      string `form:"token"`
+		ToUserId   int64  `form:"to_user_id"`
+		Content    string `form:"content"`
+		ActionType string `form:"action_type"`
+	}
+	chatActionResponse {
+		StatusCode int64  `json:"status_code"` // 状态码，0-成功，其他值-失败
+		StatusMsg  string `json:"status_msg"`  // 返回状态描述
+	}
+	chatMessageRequest {
+		Token      string `form:"token"`
+		ToUserId   string `form:"to_user_id"`
+		PreMsgTime int64  `form:"pre_msg_time"`
+	}
+	chatMessageResponse {
+		StatusCode  string    `json:"status_code"`  // 状态码，0-成功，其他值-失败
+		StatusMsg   string    `json:"status_msg"`   // 返回状态描述
+		MessageList []Message `json:"message_list"` // 用户消息列表
+	}
+)
+
+service chat{
+	@handler chatAction
+	post /douyin/message/action (chatActionRequest) returns (chatActionResponse)
+	
+	@handler chatMessage
+	get /douyin/message/chat    (chatMessageRequest) returns (chatMessageResponse)
+}

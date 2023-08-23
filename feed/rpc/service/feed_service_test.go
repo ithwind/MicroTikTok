@@ -1,7 +1,7 @@
 package service
 
 import (
-	"MicroTikTok/dal/postgres"
+	"MicroTikTok/AcessData/postgres"
 	"MicroTikTok/feed/rpc/pb/video"
 	"MicroTikTok/pkg/util"
 	"fmt"

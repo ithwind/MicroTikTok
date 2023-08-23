@@ -1,7 +1,7 @@
 package service
 
 import (
-	"MicroTikTok/dal/postgres"
+	"MicroTikTok/AcessData/postgres"
 	"testing"
 )
 

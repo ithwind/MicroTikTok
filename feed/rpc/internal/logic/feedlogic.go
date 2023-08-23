@@ -6,8 +6,6 @@ import (
 	service2 "MicroTikTok/feed/rpc/service"
 	"MicroTikTok/pkg/util"
 	"context"
-	"fmt"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -28,7 +26,7 @@ func NewFeedLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FeedLogic {
 func (l *FeedLogic) Feed(in *video.FeedRequest) (*video.FeedResponse, error) {
 	var resp video.FeedResponse
 	var feedResp *video.FeedResponse
-	fmt.Println("+++++++++++++++++++++++++++++++++")
+	l.Logger.Info("=========FeedRpc===========")
 	if in.GetToken() != "Default" || in.GetLatestTime() != 0 {
 		feedResp, err := service2.NewFeedSerVice().Feed(in)
 		if err != nil {
@@ -39,7 +37,9 @@ func (l *FeedLogic) Feed(in *video.FeedRequest) (*video.FeedResponse, error) {
 			return feedResp, err
 		}
 	}
-	fmt.Printf("token:%v  time:%v", &in.Token, &in.LatestTime)
+	//fmt.Printf("token:%v  time:%v", &in.Token, &in.LatestTime)
+	l.Logger.Infof("token:", &in.Token)
+	l.Logger.Info("time:", &in.LatestTime)
 	feedResp, _ = service2.NewFeedSerVice().Feed(in)
 
 	return feedResp, nil

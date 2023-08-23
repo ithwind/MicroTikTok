@@ -2,6 +2,7 @@ package OSS
 
 import (
 	"context"
+	"fmt"
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
 	"os"
@@ -19,7 +20,7 @@ func Upload(fileType string, filePath string) (bool, error, string) {
 	bucket := "test-tik-tok"
 
 	//获取当前时间
-	NowTime := time.Now().Format("200601021504")
+	NowTime := time.Now().Format("20060102150405")
 	key := "test-TikTok/" + fileType + "/" + NowTime
 
 	putPolicy := storage.PutPolicy{
@@ -40,6 +41,7 @@ func Upload(fileType string, filePath string) (bool, error, string) {
 	//上传传来的文件
 
 	err = resumeUploader.PutFile(context.Background(), &ret, upToken, key, localFile, &putExtra)
+	fmt.Println("UploadError:", err)
 	if err != nil {
 		return false, nil, NowTime
 	}

@@ -1,10 +1,10 @@
 package service
 
 import (
-	"MicroTikTok/constant"
-	"MicroTikTok/dal/user"
-	"MicroTikTok/dal/video"
-	"MicroTikTok/feed/model"
+	"MicroTikTok/AcessData/modelVo"
+	"MicroTikTok/AcessData/user"
+	"MicroTikTok/AcessData/video"
+	"MicroTikTok/Constant"
 	. "MicroTikTok/feed/rpc/pb/video"
 	"MicroTikTok/pkg/jwt"
 	"MicroTikTok/pkg/util"
@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-var currentUser model.User
+var currentUser model.UserVo
 
 type FeedService struct {
 }
@@ -29,7 +29,7 @@ func (feedService FeedService) Feed(request *FeedRequest) (*FeedResponse, error)
 	*/
 	resp := &FeedResponse{}
 	var lastTime time.Time
-	if request.GetLatestTime() == constant.DefaultLatestTime {
+	if request.GetLatestTime() == Constant.DefaultLatestTime {
 		lastTime = time.Now()
 	} else {
 		lastTime = time.Unix(*request.LatestTime, 0)
@@ -47,14 +47,14 @@ func (feedService FeedService) Feed(request *FeedRequest) (*FeedResponse, error)
 				NextTime:   nil,
 			}, nil
 		}
-		currentUser = claim.User
+		currentUser = claim.UserVo
 	}
 
 	dbVideos, err := video.GetVideosBeforeLastTime(lastTime)
 	if err != nil {
 		return resp, err
 	}
-	videos := make([]*Video, 0, constant.VideoFeedCount)
+	videos := make([]*Video, 0, Constant.VideoFeedCount)
 	feedService.CopyVideos(&dbVideos, &videos)
 	var publishTime = time.Now().Unix()
 	resp.StatusCode = 0

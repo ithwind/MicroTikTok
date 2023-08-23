@@ -1,0 +1,38 @@
+syntax = "proto3";
+package chat;
+
+option go_package = "./chat";
+
+message Message{
+  int64 id = 1;                 // 消息id
+  int64 from_user_id = 2;       // 发送者id
+  int64 to_user_id = 3;         // 收发者id
+  string content = 4;           // 发送内容
+  int64 create_time = 5;        // 发送消息的时间
+}
+
+
+message chat_action_request {
+  string user_id = 1; // 发送用户id
+  string to_user_id = 2; // 对方用户id
+  string content = 4; // 消息内容
+}
+
+message chat_action_response {
+  bool status = 1;  //获取状态
+}
+
+message chat_message_request {
+  string from_user_id = 1; // 发送者id
+  string to_user_id = 2;   // 收发者id
+  int64  pre_msg_time = 3;  // 前一个消息时间
+}
+message chat_message_response {
+  bool status = 1;
+  repeated Message message_list = 3;
+}
+
+service chat{
+  rpc chatAction(chat_action_request) returns(chat_action_response);
+  rpc chatMessage(chat_message_request) returns (chat_message_response);
+}

@@ -8,7 +8,6 @@ import (
 	"MicroTikTok/pkg/redis"
 	"MicroTikTok/pkg/util"
 	"context"
-	"fmt"
 	"github.com/zeromicro/go-zero/core/logx"
 	"strconv"
 )
@@ -41,10 +40,11 @@ func (l *FavoriteLogic) Favorite(in *favorite.FavoriteActionRequest) (*favorite.
 		resp.StatusMsg = util.String("当前用户不存在")
 		return &resp, err
 	}
-	currentUser := claims.User
+	currentUser := claims.UserVo
 	currentUserId := currentUser.ID
 	//插入redis
-	fmt.Printf("UserId: %v, VideoId: %v\n", currentUserId, in.VideoId)
+	l.Logger.Infof("currentUserId", currentUserId)
+	l.Logger.Infof("videoId:", in.VideoId)
 	redisService.HashSetRedis(strconv.FormatInt(currentUserId, 10), strconv.FormatInt(in.VideoId, 10), in.ActionType)
 	go service.FavoriteService()
 	if in.ActionType == "1" {

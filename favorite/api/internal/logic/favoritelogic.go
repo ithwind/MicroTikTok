@@ -3,7 +3,6 @@ package logic
 import (
 	"MicroTikTok/favorite/rpc/pb/favorite"
 	"context"
-	"fmt"
 	"time"
 
 	"MicroTikTok/favorite/api/internal/svc"
@@ -27,7 +26,6 @@ func NewFavoriteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Favorite
 }
 
 func (l *FavoriteLogic) Favorite(req *types.FavoriteRequest) (*types.FavoriteResponse, error) {
-	// todo: add your logic here and delete this line
 	var request favorite.FavoriteActionRequest
 	request.Token = req.Token
 	request.VideoId = req.VideoId
@@ -38,9 +36,9 @@ func (l *FavoriteLogic) Favorite(req *types.FavoriteRequest) (*types.FavoriteRes
 	defer cancel()
 	response, err := l.svcCtx.FavoriteRpc.Favorite(ctx, &request)
 	if err != nil {
-		fmt.Println("FError:", err)
+		l.Logger.Error(err)
 		resp.StatusCode = 400
-		resp.StatusMsg = "点赞操作执行失败"
+		resp.StatusMsg = "点赞或取消点赞操作执行失败"
 		return &resp, err
 	}
 	resp.StatusCode = int64(response.StatusCode)

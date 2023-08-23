@@ -1,7 +1,7 @@
 package service
 
 import (
-	"MicroTikTok/dal/video"
+	"MicroTikTok/AcessData/video"
 	cron "MicroTikTok/pkg/corn"
 	"MicroTikTok/pkg/redis"
 	"fmt"

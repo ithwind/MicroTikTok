@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"MicroTikTok/dal/postgres"
+	"MicroTikTok/AcessData/postgres"
 	"MicroTikTok/feed/rpc/internal/svc"
 	"MicroTikTok/feed/rpc/pb/video"
 	"context"

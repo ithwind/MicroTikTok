@@ -1,7 +1,7 @@
 package main
 
 import (
-	"MicroTikTok/dal/postgres"
+	"MicroTikTok/AcessData/postgres"
 	"flag"
 	"fmt"
 

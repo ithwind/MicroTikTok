@@ -1,8 +1,8 @@
 package logic
 
 import (
-	"MicroTikTok/dal/user"
-	video2 "MicroTikTok/dal/video"
+	"MicroTikTok/AcessData/user"
+	video2 "MicroTikTok/AcessData/video"
 	"MicroTikTok/pkg/jwt"
 	"MicroTikTok/pkg/util"
 	"context"
@@ -28,14 +28,13 @@ func NewGetPublishListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 }
 
 func (l *GetPublishListLogic) GetPublishList(in *video.PublishListRequest) (*video.PublishListResponse, error) {
-	// todo: commentCount未实现
 	var response video.PublishListResponse
 	/**
 	1.解析token
 	*/
 	token := in.Token
 	claims, err := jwt.ParseToken(token)
-	currentUser := claims.User
+	currentUser := claims.UserVo
 	if err != nil {
 		response.StatusCode = 400
 		response.StatusMsg = util.String("获取失败")
@@ -51,6 +50,7 @@ func (l *GetPublishListLogic) GetPublishList(in *video.PublishListRequest) (*vid
 		TotalFavoriteCount := user.GetTotalFavoriteCount(author.ID)
 		WorkCount := user.GetWorkCountByUserId(author.ID)
 		FavoriteCount := user.GetFavoriteCount(author.ID)
+		CommentCount, _ := video2.GetCommentCount(v.ID)
 		backVideo := video.Video{
 			Id: v.ID,
 			Author: &video.User{
@@ -69,7 +69,7 @@ func (l *GetPublishListLogic) GetPublishList(in *video.PublishListRequest) (*vid
 			PlayUrl:       v.PlayURL,
 			CoverUrl:      v.CoverURL,
 			FavoriteCount: video2.GetFavoriteCountByVideoId(v.ID),
-			CommentCount:  0,
+			CommentCount:  CommentCount,
 			IsFavorite:    user.GetIsFavoriteByUserId(currentUser.ID, v.ID),
 			Title:         v.Title,
 		}

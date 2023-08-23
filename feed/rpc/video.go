@@ -1,7 +1,7 @@
 package main
 
 import (
-	"MicroTikTok/dal/postgres"
+	"MicroTikTok/AcessData/postgres"
 	"MicroTikTok/feed/rpc/internal/config"
 	"MicroTikTok/feed/rpc/internal/server"
 	"MicroTikTok/feed/rpc/internal/svc"

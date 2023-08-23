@@ -1,14 +1,15 @@
 package jwt
 
 import (
-	. "MicroTikTok/feed/model"
+	. "MicroTikTok/AcessData/modelVo"
+	"fmt"
 	"github.com/golang-jwt/jwt/v4"
 	"time"
 )
 
 type MyClaims struct {
 	UserId int
-	User
+	UserVo
 	jwt.RegisteredClaims
 }
 
@@ -16,25 +17,27 @@ type MyClaims struct {
 const key = "ithWind"
 
 // GenerateToken /*生成token*/
-func GenerateToken(id int, user User) string {
+func GenerateToken(id int, user UserVo) string {
 	claims := MyClaims{
 		UserId: id,
-		User:   user,
+		UserVo: user,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(30 * time.Minute)), //设置超时时间
 			Subject:   "IthWind",
 		},
 	}
-	token, _ := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(key))
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(key))
 
+	fmt.Println("GenerateError:", err)
 	return token
 }
 
 // ParseToken /*解析token*/
 func ParseToken(tokenStr string) (*MyClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenStr, &MyClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return key, nil
+		return []byte(key), nil
 	})
+	fmt.Println("ParseError:", err)
 	if claims, ok := token.Claims.(*MyClaims); ok {
 		return claims, nil
 	} else {

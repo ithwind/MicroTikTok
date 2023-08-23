@@ -15,7 +15,13 @@ func GenerateCover(videoPath, snapshotPath string, frameNum int) (coverName stri
 	buf := bytes.NewBuffer(nil)
 	err = ffmpeg.Input(videoPath).
 		Filter("select", ffmpeg.Args{fmt.Sprintf("gte(n,%d)", frameNum)}).
-		Output("pipe:", ffmpeg.KwArgs{"vframes": 1, "format": "image2", "vcodec": "mjpeg"}).
+		Output("pipe:", ffmpeg.KwArgs{
+			"vframes":     1,
+			"format":      "image2",
+			"vcodec":      "mjpeg",
+			"pix_fmt":     "yuvj420p", // 设置正确的像素格式
+			"color_range": "pc",       // 设置正确的像素范围
+		}).
 		WithOutput(buf, os.Stdout).
 		Run()
 	if err != nil {

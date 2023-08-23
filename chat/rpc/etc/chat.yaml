@@ -1,0 +1,8 @@
+Name: chatRpc
+ListenOn: 0.0.0.0:9092
+Mode: pro
+
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: chatRpc

@@ -1,9 +1,9 @@
 package logic
 
 import (
-	"MicroTikTok/constant"
-	"MicroTikTok/dal/user"
-	video2 "MicroTikTok/dal/video"
+	"MicroTikTok/AcessData/user"
+	video2 "MicroTikTok/AcessData/video"
+	"MicroTikTok/Constant"
 	"MicroTikTok/feed/rpc/internal/svc"
 	"MicroTikTok/feed/rpc/pb/video"
 	"MicroTikTok/pkg/jwt"
@@ -30,15 +30,13 @@ func NewUploadLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UploadLogi
 
 func (l *UploadLogic) Upload(in *video.PublishActionRequest) (*video.PublishActionResponse, error) {
 	// todo: add your logic here and delete this line
-
-	fmt.Printf("Token: %v, Title: %v, Time: %v\n", in.Token, in.Title, &in.UploadTime)
 	var resp video.PublishActionResponse
 	/**
 	1.解析token获取当前用户信息
 	*/
 	claim, err := jwt.ParseToken(in.Token)
-	currentUser := claim.User
-	fmt.Printf("%v", currentUser)
+	currentUser := claim.UserVo
+	l.Logger.Infof("currentUser:", currentUser)
 	/**
 	1.更新video表
 	2.更新user_video表
@@ -47,8 +45,8 @@ func (l *UploadLogic) Upload(in *video.PublishActionRequest) (*video.PublishActi
 	var addVideo video2.Video
 	addVideo.Title = in.Title
 	addVideo.PublishTime = time.Now()
-	addVideo.PlayURL = constant.URLVideoPrefix + "/" + util.GetString(in.UploadTime)
-	addVideo.CoverURL = constant.URLCoverPrefix + "/" + util.GetString(in.UploadTime)
+	addVideo.PlayURL = Constant.URLVideoPrefix + "/" + util.GetString(in.UploadTime)
+	addVideo.CoverURL = Constant.URLCoverPrefix + "/" + util.GetString(in.UploadTime)
 	video2.UpdateVideo(&addVideo)
 	err = user.AddUserVideoTable(currentUser.ID, addVideo.ID)
 
