@@ -1,11 +1,11 @@
 package service
 
 import (
-	"MicroTikTok/AcessData/postgres"
+	"MicroTikTok/AcessData/mysql"
 	"testing"
 )
 
 func TestFavoriteService(t *testing.T) {
-	postgres.Init()
+	mysql.Init()
 	FavoriteService()
 }

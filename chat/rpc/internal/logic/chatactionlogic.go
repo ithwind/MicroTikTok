@@ -34,18 +34,18 @@ func (l *ChatActionLogic) ChatAction(in *chat.ChatActionRequest) (*chat.ChatActi
 	//判断聊天用户
 	//AI对象
 	if in.ToUserId == "0" {
-		//获取AI的返回内容
-		responseContent := AIChat.Chat(in.Content)
 		/**
 		1.先将用户的聊天信息的存入数据数据库
 		2.将AI响应的信息存入数据库 发送者和收发者进行对调
 		*/
-		// 将聊天记录缓存到内存中
-		chat2.CacheChatRecord(int64(fromUserId), int64(toUserId), content)
-		chat2.CacheChatRecord(int64(toUserId), int64(fromUserId), responseContent)
-
 		// 在协程中批量插入数据库
 		go func() {
+			responseContent := AIChat.Chat(in.Content)
+
+			// 将聊天记录缓存到内存中
+			chat2.CacheChatRecord(int64(fromUserId), int64(toUserId), content)
+			chat2.CacheChatRecord(int64(toUserId), int64(fromUserId), responseContent)
+			//插入数据库
 			err := chat2.InsertCachedRecords()
 			if err != nil {
 				status = false

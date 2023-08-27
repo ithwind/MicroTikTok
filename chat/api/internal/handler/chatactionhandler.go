@@ -1,12 +1,13 @@
 package handler
 
 import (
-	"net/http"
-
 	"MicroTikTok/chat/api/internal/logic"
 	"MicroTikTok/chat/api/internal/svc"
 	"MicroTikTok/chat/api/internal/types"
+	"fmt"
 	"github.com/zeromicro/go-zero/rest/httpx"
+	"net/http"
+	"net/url"
 )
 
 func chatActionHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
@@ -16,7 +17,9 @@ func chatActionHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
-
+		fmt.Println(url.QueryEscape(req.Content))
+		req.Content = url.QueryEscape(req.Content)
+		fmt.Println("ParamContent:", req.Content)
 		l := logic.NewChatActionLogic(r.Context(), svcCtx)
 		resp, err := l.ChatAction(&req)
 		if err != nil {

@@ -1,7 +1,7 @@
 package video
 
 import (
-	. "MicroTikTok/AcessData/postgres"
+	. "MicroTikTok/AcessData/mysql"
 	"MicroTikTok/Constant"
 	"MicroTikTok/favorite/model"
 	. "MicroTikTok/pkg/util"

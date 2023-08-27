@@ -41,7 +41,7 @@ func (feedService FeedService) Feed(request *FeedRequest) (*FeedResponse, error)
 		claim, err := jwt.ParseToken(request.GetToken())
 		if err != nil {
 			return &FeedResponse{
-				StatusCode: 400,
+				StatusCode: Constant.StatusHttpFail,
 				StatusMsg:  util.String("token非法"),
 				VideoList:  nil,
 				NextTime:   nil,
@@ -57,7 +57,7 @@ func (feedService FeedService) Feed(request *FeedRequest) (*FeedResponse, error)
 	videos := make([]*Video, 0, Constant.VideoFeedCount)
 	feedService.CopyVideos(&dbVideos, &videos)
 	var publishTime = time.Now().Unix()
-	resp.StatusCode = 0
+	resp.StatusCode = Constant.StatusHttpOk
 	resp.VideoList = videos
 	resp.StatusMsg = util.String("获取成功")
 	resp.NextTime = &publishTime

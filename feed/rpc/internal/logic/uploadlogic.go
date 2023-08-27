@@ -51,11 +51,11 @@ func (l *UploadLogic) Upload(in *video.PublishActionRequest) (*video.PublishActi
 	err = user.AddUserVideoTable(currentUser.ID, addVideo.ID)
 
 	if err != nil {
-		resp.StatusCode = 400
+		resp.StatusCode = Constant.StatusHttpFail
 		resp.StatusMsg = util.String("发布失败")
 		return &resp, err
 	}
-	resp.StatusCode = 200
+	resp.StatusCode = Constant.StatusHttpOk
 	resp.StatusMsg = util.String("发布成功")
 	fmt.Printf("RPCResp:%v", &resp)
 	return &resp, nil

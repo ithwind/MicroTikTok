@@ -1,7 +1,7 @@
 package main
 
 import (
-	"MicroTikTok/AcessData/postgres"
+	"MicroTikTok/AcessData/mysql"
 	"flag"
 	"fmt"
 
@@ -22,7 +22,7 @@ var configFile = flag.String("f", "etc/chat.yaml", "the config file")
 func main() {
 	//go service2.StartPolling()
 	flag.Parse()
-	postgres.Init()
+	mysql.Init()
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)

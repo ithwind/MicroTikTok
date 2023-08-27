@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"MicroTikTok/Constant"
 	"MicroTikTok/chat/rpc/pb/chat"
 	"MicroTikTok/pkg/jwt"
 	"context"
@@ -33,7 +34,7 @@ func (l *ChatMessageLogic) ChatMessage(req *types.ChatMessageRequest) (*types.Ch
 	//解析token
 	claims, err := jwt.ParseToken(req.Token)
 	if err != nil {
-		resp.StatusCode = "-1"
+		resp.StatusCode = strconv.Itoa(Constant.StatusHttpFail)
 		resp.StatusMsg = "解析token失败"
 		resp.MessageList = nil
 		return &resp, err
@@ -45,7 +46,7 @@ func (l *ChatMessageLogic) ChatMessage(req *types.ChatMessageRequest) (*types.Ch
 		ToUserId:   req.ToUserId,
 	})
 	if err != nil || response.Status == false {
-		resp.StatusCode = "-1"
+		resp.StatusCode = strconv.Itoa(Constant.StatusHttpFail)
 		resp.StatusMsg = "rpc连接失败"
 		resp.MessageList = nil
 		return &resp, err
@@ -58,7 +59,7 @@ func (l *ChatMessageLogic) ChatMessage(req *types.ChatMessageRequest) (*types.Ch
 	}
 
 	fmt.Println("chatMessages:", chatMessages)
-	resp.StatusCode = "0"
+	resp.StatusCode = strconv.Itoa(Constant.StatusHttpOk)
 	resp.StatusMsg = "获取聊天记录成功"
 	resp.MessageList = chatMessages
 	return &resp, nil

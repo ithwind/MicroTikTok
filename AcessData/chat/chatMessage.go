@@ -1,25 +1,25 @@
 package chat
 
 import (
-	. "MicroTikTok/AcessData/postgres"
+	. "MicroTikTok/AcessData/mysql"
 	"MicroTikTok/Constant"
 	"fmt"
 	"sync"
 	"time"
 )
 
-type ChatRecord struct {
+type RecordChat struct {
 	Id         int64     `gorm:"column:id"`
 	FromUserId int64     `gorm:"column:from_user_id"`
 	ToUserId   int64     `gorm:"column:to_user_id"`
 	Content    string    `gorm:"column:content"`
-	CreateTime time.Time `gorm:"column:created_at"`
+	CreatedAt  time.Time `gorm:"column:created_at"`
 }
 
-var chatRecordCache = make(map[int64][]ChatRecord)
+var chatRecordCache = make(map[int64][]RecordChat)
 var chatRecordCacheMutex sync.Mutex
 
-func (ChatRecord) TableName() string {
+func (RecordChat) TableName() string {
 	return Constant.ChatTableName
 }
 
@@ -28,7 +28,7 @@ func CacheChatRecord(fromUserId, toUserId int64, content string) {
 	chatRecordCacheMutex.Lock()
 	defer chatRecordCacheMutex.Unlock()
 
-	chatRecordCache[fromUserId] = append(chatRecordCache[fromUserId], ChatRecord{
+	chatRecordCache[fromUserId] = append(chatRecordCache[fromUserId], RecordChat{
 		FromUserId: fromUserId,
 		ToUserId:   toUserId,
 		Content:    content,
@@ -56,20 +56,21 @@ func InsertCachedRecords() error {
 
 func CreateMessage(fromUserId, toUserId int64, content string) error {
 	fmt.Println("From:", fromUserId, "To:", toUserId, "Content:", content)
-	chatMessage := ChatRecord{
+	chatMessage := RecordChat{
 		FromUserId: fromUserId,
 		ToUserId:   toUserId,
 		Content:    content,
-		CreateTime: time.Now(),
+		CreatedAt:  time.Now(),
 	}
+	fmt.Println(chatMessage)
 	err := DB.Select("from_user_id", "to_user_id", "content", "created_at").Create(&chatMessage).Error
 	fmt.Println("CreateError:", err)
 	return err
 }
 
-func QueryMessagesByFromUserIdAndToUserId(fromUserId int64, toUserId int64, preMsgTime time.Time) (*[]ChatRecord, error) {
+func QueryMessagesByFromUserIdAndToUserId(fromUserId int64, toUserId int64, preMsgTime time.Time) (*[]RecordChat, error) {
 	//var count int64
-	var chatMessages *[]ChatRecord
+	var chatMessages *[]RecordChat
 	err := DB.Table(Constant.ChatTableName).Where("from_user_id = ? And to_user_id = ? And created_at > ?", fromUserId, toUserId, preMsgTime).Find(&chatMessages).Error
 
 	return chatMessages, err

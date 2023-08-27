@@ -1,28 +1,31 @@
 package video
 
 import (
-	"MicroTikTok/AcessData/postgres"
+	"MicroTikTok/AcessData/mysql"
 	"fmt"
 	"testing"
 	"time"
 )
 
 func TestGetVideosBeforeLastTime(t *testing.T) {
-	postgres.Init()
+	mysql.Init()
 	videos, err := GetVideosBeforeLastTime(time.Now())
+
 	if err != nil {
 		return
 	}
-	fmt.Printf("%v", videos)
+	for _, video := range videos {
+		fmt.Println(video)
+	}
 }
 
 func TestGetFavoriteCountByVideoId(t *testing.T) {
-	postgres.Init()
+	mysql.Init()
 	println(GetFavoriteCountByVideoId(2))
 }
 
 func TestUpdateVideo(t *testing.T) {
-	postgres.Init()
+	mysql.Init()
 	newVideo := &Video{
 		PlayURL:     "fsfsdf",
 		CoverURL:    "fsdsfsf",
@@ -33,22 +36,22 @@ func TestUpdateVideo(t *testing.T) {
 }
 
 func TestQueryVideosByUserId(t *testing.T) {
-	postgres.Init()
+	mysql.Init()
 	fmt.Println(QueryVideoIdsByUserId(1))
 }
 
 func TestGetVideoById(t *testing.T) {
-	postgres.Init()
+	mysql.Init()
 	fmt.Println(GetVideoById(1))
 }
 
 func TestGetPublishTest(t *testing.T) {
-	postgres.Init()
+	mysql.Init()
 	fmt.Println(GetPublishList(1))
 }
 
 func TestNewSetFavorite(t *testing.T) {
-	postgres.Init()
+	mysql.Init()
 	err := NewSetFavorite(565, 5656)
 	if err != nil {
 		return
@@ -56,7 +59,7 @@ func TestNewSetFavorite(t *testing.T) {
 }
 
 func TestDeleteFavorite(t *testing.T) {
-	postgres.Init()
+	mysql.Init()
 	err := DeleteFavorite(1, 57)
 	if err != nil {
 		return
@@ -64,7 +67,7 @@ func TestDeleteFavorite(t *testing.T) {
 }
 
 func TestGetCommentCount(t *testing.T) {
-	postgres.Init()
+	mysql.Init()
 	commentCount, err := GetCommentCount(1)
 	if err != nil {
 		return

@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"MicroTikTok/Constant"
 	"MicroTikTok/feed/api/internal/svc"
 	"MicroTikTok/feed/api/internal/types"
 	"MicroTikTok/feed/rpc/pb/video"
@@ -77,14 +78,14 @@ func (l *UploadLogic) Upload(req *types.PublishActionRequest, savePath string) (
 	fmt.Printf("ReqToken:%v, ReqTitle:%v, ReqTime:%v", request.GetToken(), request.Title, request.UploadTime)
 	response, err := l.svcCtx.VideoRpc.Upload(l.ctx, &request)
 	if err != nil {
-		r.StatusCode = 400
+		r.StatusCode = Constant.StatusHttpFail
 		r.StatusMsg = "上传失败"
 		return &r, err
 	}
 	if l.uploadCoverStatus == false || l.uploadVideoStatus == false {
 		fmt.Println("Cover:", l.uploadCoverStatus)
 		fmt.Println("Video:", l.uploadVideoStatus)
-		r.StatusCode = 400
+		r.StatusCode = Constant.StatusHttpFail
 		r.StatusMsg = "上传视频或封面失败"
 		return &r, nil
 	}

@@ -2,7 +2,7 @@ package user
 
 import (
 	"MicroTikTok/AcessData/modelVo"
-	. "MicroTikTok/AcessData/postgres"
+	. "MicroTikTok/AcessData/mysql"
 	"MicroTikTok/AcessData/video"
 	"MicroTikTok/Constant"
 	"fmt"

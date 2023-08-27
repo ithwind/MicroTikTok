@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"MicroTikTok/Constant"
 	"MicroTikTok/favorite/rpc/internal/service"
 	"MicroTikTok/favorite/rpc/internal/svc"
 	"MicroTikTok/favorite/rpc/pb/favorite"
@@ -49,10 +50,10 @@ func (l *FavoriteLogic) Favorite(in *favorite.FavoriteActionRequest) (*favorite.
 	go service.FavoriteService()
 
 	if in.ActionType == "1" {
-		resp.StatusCode = 200
+		resp.StatusCode = Constant.StatusHttpOk
 		resp.StatusMsg = util.String("点赞成功")
 	} else if in.ActionType == "0" {
-		resp.StatusCode = 200
+		resp.StatusCode = Constant.StatusHttpOk
 		resp.StatusMsg = util.String("取消点赞成功")
 	}
 	return &resp, nil

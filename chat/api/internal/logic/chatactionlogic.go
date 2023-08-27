@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"MicroTikTok/Constant"
 	"MicroTikTok/chat/api/internal/svc"
 	"MicroTikTok/chat/api/internal/types"
 	"MicroTikTok/chat/rpc/pb/chat"
@@ -39,7 +40,7 @@ func (l *ChatActionLogic) ChatAction(req *types.ChatActionRequest) (*types.ChatA
 		return nil, err
 	}
 	return &types.ChatActionResponse{
-		StatusCode: 0,
+		StatusCode: Constant.StatusHttpOk,
 		StatusMsg:  "发送消息成功",
 	}, nil
 }

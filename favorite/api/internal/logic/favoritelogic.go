@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"MicroTikTok/Constant"
 	"MicroTikTok/favorite/rpc/pb/favorite"
 	"context"
 	"time"
@@ -38,7 +39,7 @@ func (l *FavoriteLogic) Favorite(req *types.FavoriteRequest) (*types.FavoriteRes
 
 	if err != nil {
 		l.Logger.Error(err)
-		resp.StatusCode = 400
+		resp.StatusCode = Constant.StatusHttpFail
 		resp.StatusMsg = "点赞或取消点赞操作执行失败"
 		return &resp, err
 	}

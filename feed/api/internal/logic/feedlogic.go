@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"MicroTikTok/Constant"
 	"MicroTikTok/feed/api/internal/svc"
 	"MicroTikTok/feed/api/internal/types"
 	"MicroTikTok/feed/rpc/feed"
@@ -30,7 +31,7 @@ func (l *FeedLogic) Feed(req *types.FeedRequest) (resp *types.FeedResponse, err 
 	}
 	response, err := l.svcCtx.VideoRpc.Feed(l.ctx, &request)
 	if err != nil {
-		resp.StatusCode = 500
+		resp.StatusCode = Constant.StatusHttpFail
 		resp.StatusMsg = "系统错误"
 		resp.VideoList = nil
 		resp.NextTime = int64(0)

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"MicroTikTok/AcessData/postgres"
+	"MicroTikTok/AcessData/mysql"
 	"MicroTikTok/feed/rpc/pb/video"
 	"MicroTikTok/pkg/util"
 	"fmt"
@@ -10,7 +10,7 @@ import (
 )
 
 func TestFeedService_Feed(t *testing.T) {
-	postgres.Init()
+	mysql.Init()
 	var latest = time.Now().Unix()
 	request := video.FeedRequest{
 		LatestTime: &latest,

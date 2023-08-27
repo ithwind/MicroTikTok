@@ -1,7 +1,7 @@
 package AcessData
 
-import "MicroTikTok/AcessData/postgres"
+import "MicroTikTok/AcessData/mysql"
 
 func Init() {
-	postgres.Init()
+	mysql.Init()
 }

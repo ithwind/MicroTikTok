@@ -1,7 +1,7 @@
 package main
 
 import (
-	"MicroTikTok/AcessData/postgres"
+	"MicroTikTok/AcessData/mysql"
 	"MicroTikTok/chat/api/internal/config"
 	"MicroTikTok/chat/api/internal/handler"
 	"MicroTikTok/chat/api/internal/svc"
@@ -16,7 +16,7 @@ var configFile = flag.String("f", "etc/chat.yaml", "the config file")
 
 func main() {
 	flag.Parse()
-	postgres.Init()
+	mysql.Init()
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 

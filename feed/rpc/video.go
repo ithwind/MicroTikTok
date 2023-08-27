@@ -1,7 +1,7 @@
 package main
 
 import (
-	"MicroTikTok/AcessData/postgres"
+	"MicroTikTok/AcessData/mysql"
 	"MicroTikTok/feed/rpc/internal/config"
 	"MicroTikTok/feed/rpc/internal/server"
 	"MicroTikTok/feed/rpc/internal/svc"
@@ -20,7 +20,7 @@ var configFile = flag.String("f", "etc/video.yaml", "the config file")
 
 func main() {
 	flag.Parse()
-	postgres.Init()
+	mysql.Init()
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)

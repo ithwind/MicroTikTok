@@ -1,15 +1,15 @@
 package chat
 
 import (
-	"MicroTikTok/AcessData/postgres"
+	"MicroTikTok/AcessData/mysql"
 	"fmt"
 	"testing"
 	"time"
 )
 
 func TestCreateMessage(t *testing.T) {
-	postgres.Init()
-	err := CreateMessage(1, 0, "aaa")
+	mysql.Init()
+	err := CreateMessage(1, 0, "bb")
 	if err != nil {
 		return
 	}
@@ -17,7 +17,7 @@ func TestCreateMessage(t *testing.T) {
 }
 
 func TestQueryMessagesByFromUserIdAndToUserId(t *testing.T) {
-	postgres.Init()
+	mysql.Init()
 	count, err := QueryMessagesByFromUserIdAndToUserId(1, 0, time.Unix(1692688320, 0))
 	if err != nil {
 		return

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"MicroTikTok/AcessData/postgres"
+	"MicroTikTok/AcessData/mysql"
 	"flag"
 	"fmt"
 
@@ -21,7 +21,7 @@ var configFile = flag.String("f", "etc/favorite.yaml", "the config file")
 
 func main() {
 	flag.Parse()
-	postgres.Init()
+	mysql.Init()
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)

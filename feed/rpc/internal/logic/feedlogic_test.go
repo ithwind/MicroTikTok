@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"MicroTikTok/AcessData/postgres"
+	"MicroTikTok/AcessData/mysql"
 	"MicroTikTok/feed/rpc/internal/svc"
 	"MicroTikTok/feed/rpc/pb/video"
 	"context"
@@ -10,7 +10,7 @@ import (
 )
 
 func TestFeedLogic_Feed(t *testing.T) {
-	postgres.Init()
+	mysql.Init()
 	var req = video.FeedRequest{
 		LatestTime: nil,
 		Token:      nil,

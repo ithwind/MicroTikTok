@@ -3,6 +3,7 @@ package logic
 import (
 	"MicroTikTok/AcessData/user"
 	video2 "MicroTikTok/AcessData/video"
+	"MicroTikTok/Constant"
 	"MicroTikTok/pkg/jwt"
 	"MicroTikTok/pkg/util"
 	"context"
@@ -36,7 +37,7 @@ func (l *GetPublishListLogic) GetPublishList(in *video.PublishListRequest) (*vid
 	claims, err := jwt.ParseToken(token)
 	currentUser := claims.UserVo
 	if err != nil {
-		response.StatusCode = 400
+		response.StatusCode = Constant.StatusHttpFail
 		response.StatusMsg = util.String("获取失败")
 		response.VideoList = nil
 		return &response, err
@@ -75,7 +76,7 @@ func (l *GetPublishListLogic) GetPublishList(in *video.PublishListRequest) (*vid
 		}
 		videoList = append(videoList, &backVideo)
 	}
-	response.StatusCode = 200
+	response.StatusCode = Constant.StatusHttpOk
 	response.StatusMsg = util.String("获取成功")
 	response.VideoList = videoList
 	return &response, nil

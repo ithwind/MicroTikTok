@@ -53,12 +53,12 @@ func (l *ChatMessageLogic) ChatMessage(in *chat.ChatMessageRequest) (*chat.ChatM
 	}, nil
 }
 
-func convertChatRecordToMessage(record *chat2.ChatRecord) *chat.Message {
+func convertChatRecordToMessage(record *chat2.RecordChat) *chat.Message {
 	return &chat.Message{
 		Id:         record.Id,
 		FromUserId: record.FromUserId,
 		ToUserId:   record.ToUserId,
 		Content:    record.Content,
-		CreateTime: record.CreateTime.Unix(),
+		CreateTime: record.CreatedAt.Unix(),
 	}
 }
