@@ -115,3 +115,15 @@ func AddUserVideoTable(userId int64, videoId int64) error {
 	})
 	return result.Error
 }
+
+// GetIsFollowByUserId 根据粉丝id查找是否关注视频作者
+func GetIsFollowByUserId(userId int64, followerId int64) bool {
+	var userIds []int64
+	DB.Table("user_follow").Where("follower_id = ?", followerId).Select("user_id").Find(&userIds)
+	for _, id := range userIds {
+		if id == userId {
+			return true
+		}
+	}
+	return false
+}

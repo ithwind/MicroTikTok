@@ -61,3 +61,8 @@ func TestGetRawPassword(t *testing.T) {
 	mysql.Init()
 	fmt.Println(GetRawPassword("ithwind"))
 }
+
+func TestGetIsFollowByUserId(t *testing.T) {
+	mysql.Init()
+	println(GetIsFollowByUserId(1, 2))
+}

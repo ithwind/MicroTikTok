@@ -10,8 +10,15 @@ import (
 
 var (
 	DB *gorm.DB
-	//mysql dsn = "user=mysql password=qb030929 dbname=testTikTok port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	//mysql
 	dsn = "root:qb030929@tcp(localhost:3306)/tiktok?parseTime=true&loc=Asia%2FShanghai"
+	//dsn = "user=mysql password=qb030929 dbname=testTikTok port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	/*host     = os.Getenv("MYSQL_HOST")
+	name     = os.Getenv("MYSQL_USER")
+	password = os.Getenv("MYSQL_PASSWORD")
+	port     = os.Getenv("MYSQL_PORT")
+	dbName   = "tiktok"
+	dsn      = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&loc=Asia%%2FShanghai", name, password, host, port, dbName)*/
 )
 
 func Init() {

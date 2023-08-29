@@ -75,3 +75,12 @@ func TestGetCommentCount(t *testing.T) {
 
 	fmt.Println(commentCount)
 }
+
+func TestGetVideoIdsByUserId(t *testing.T) {
+	mysql.Init()
+	videoIds, err := GetFavoriteVideoIdsByUserId(1)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	fmt.Println(videoIds)
+}

@@ -96,3 +96,12 @@ func GetCommentCount(videoId int64) (int64, error) {
 
 	return commentCount, err
 }
+
+func GetFavoriteVideoIdsByUserId(userId int64) ([]int64, error) {
+	var videoIds []int64
+	err := DB.Table("user_video_favorite").Where("user_id = ?", userId).Select("video_id").Find(&videoIds).Error
+	if err != nil {
+		return nil, err
+	}
+	return videoIds, nil
+}
