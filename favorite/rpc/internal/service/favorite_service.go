@@ -46,7 +46,6 @@ func FavoriteService() {
 	}
 	time.Sleep(2 * time.Minute)
 }
-
 func RedisAndDB() {
 	//取出redis中点赞数据
 	redisData, err := redisService.HashSetGet()

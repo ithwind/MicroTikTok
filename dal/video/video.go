@@ -48,7 +48,7 @@ func UpdateVideo(addVideo *Video) {
 
 func QueryVideoIdsByUserId(userId int64) []int64 {
 	videoIds := make([]int64, 0, 30)
-	DB.Table("user_video").Where("user_id = ?", userId).Select("video_id").Find(&videoIds)
+	DB.Table("user_video_favorite").Where("user_id = ?", userId).Select("video_id").Find(&videoIds)
 
 	return videoIds
 }

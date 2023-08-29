@@ -34,7 +34,6 @@ func GenerateCover(videoPath, snapshotPath string, frameNum int) (coverName stri
 		log.Fatal("生成缩略图失败：", err)
 		return "", err
 	}
-
 	names := strings.Split(snapshotPath, "\\")
 	coverName = names[len(names)-1] + ".png"
 	return coverName, nil

@@ -1,7 +1,9 @@
 package redis
 
 import (
+	"MicroTikTok/favoritelist/rpc/pb/favoritelist"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"time"
@@ -9,13 +11,16 @@ import (
 
 var tableKey = "video-favorite"
 
+// 定义视频信息表名
+var videoTable = "video_info"
+
 type ServiceOfRedis struct {
 	client *redis.Client
 }
 
 func NewRedisCacheService() (*ServiceOfRedis, error) {
 	client := redis.NewClient(&redis.Options{
-		Addr:     "172.17.24.94:6379",
+		Addr:     "127.0.0.1:6379",
 		Password: "",
 		DB:       0,
 	})
@@ -53,7 +58,6 @@ func (r *ServiceOfRedis) HashSetRedis(userId string, videoId string, favoriteTyp
 		return
 	}
 	fmt.Println("InsertRedis:", result)
-
 }
 
 // GetValueByUserName 通过username取token
@@ -62,7 +66,6 @@ func (r *ServiceOfRedis) GetValueByUserName(username string) (string, error) {
 	token, err := r.client.Get(ctx, username).Result()
 	return token, err
 }
-
 func (r *ServiceOfRedis) ExistKey() bool {
 	flag, err := r.client.Exists(context.Background(), tableKey).Result()
 	if err != nil || flag == 0 {
@@ -71,6 +74,13 @@ func (r *ServiceOfRedis) ExistKey() bool {
 	return true
 }
 
+func (r *ServiceOfRedis) VideoKey() bool {
+	flag, err := r.client.Exists(context.Background(), videoTable).Result()
+	if err != nil || flag == 0 {
+		return false
+	}
+	return true
+}
 func (r *ServiceOfRedis) HashSetGet() (map[string]string, error) {
 	result, err := r.client.HGetAll(context.Background(), tableKey).Result()
 	if err != nil {
@@ -78,6 +88,48 @@ func (r *ServiceOfRedis) HashSetGet() (map[string]string, error) {
 		return nil, err
 	}
 	return result, nil
+}
+
+// SetVideoInfo 存入视频信息
+func (r *ServiceOfRedis) SetVideoInfo(videoId string, videoInfo favoritelist.Video) error {
+
+	// 构造哈希表的key
+	key := "video:" + videoId
+
+	// 设置视频信息
+	ctx := context.Background()
+	result, err := r.client.HSet(ctx, videoTable, key, videoInfo).Result()
+
+	if err != nil {
+		// 返回错误
+		return err
+	}
+
+	fmt.Println("Set video success:", result)
+
+	return nil
+}
+
+// GetVideoInfo 从redis取出视频信息
+func (r *ServiceOfRedis) GetVideoInfo(videoId string) (*favoritelist.Video, error) {
+
+	// 构造redis key
+	key := "video:" + videoId
+
+	// 从redis获取视频信息
+	ctx := context.Background()
+	videoInfo, err := r.client.HGet(ctx, videoTable, key).Result()
+	if err != nil {
+		return nil, err
+	}
+	fmt.Printf("redis raw result: %v\n", videoInfo)
+	// 反序列化videoInfo到Video对象
+	var video favoritelist.Video
+	if err = json.Unmarshal([]byte(videoInfo), &video); err != nil {
+		return nil, err
+	}
+
+	return &video, nil
 }
 
 // ClearUserVideoFavorite 清空当前表中数据

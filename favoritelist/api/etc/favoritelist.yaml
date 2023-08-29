@@ -1,0 +1,9 @@
+Name: Favoritelist
+Host: 0.0.0.0
+Port: 8882
+
+FavoriteListRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: favoriteList.rpc

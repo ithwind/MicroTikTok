@@ -42,7 +42,6 @@ func (l *FeedLogic) Feed(req *types.FeedRequest) (resp *types.FeedResponse, err 
 	videoListPtr := response.GetVideoList()
 	// 创建一个 []Video 类型的切片
 	var videoList []types.Video
-
 	// 将每个指针类型的 Video 转换为实际类型的 Video，并添加到 videoList 中
 	for _, v := range videoListPtr {
 		videoList = append(videoList, types.Video{

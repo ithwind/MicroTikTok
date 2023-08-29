@@ -36,7 +36,6 @@ func (feedService FeedService) Feed(request *FeedRequest) (*FeedResponse, error)
 	}
 	fmt.Printf("New LastTime: %v\n", lastTime)
 	//获取token
-
 	if request.GetToken() != "Default" {
 		claim, err := jwt.ParseToken(request.GetToken())
 		if err != nil {
@@ -79,12 +78,10 @@ func (feedService FeedService) GenerateVideo(data *video.Video) *Video {
 		CoverUrl: data.CoverURL,
 		Title:    data.Title,
 	}
-
 	var wg sync.WaitGroup //并发获取参数
 	wg.Add(4)
 	//通过视频Id获取作者的参数 获取粉丝总数，关注数，评论，喜欢数，作品数，点赞总数
 	var userId = user.GetUserIdByVideoId(v.GetId())
-
 	var followCount = user.GetFollowCountByUserId(userId)
 	var FollowerCount = user.GetFollowerCountByUserId(userId)
 	var TotalFavorited = user.GetTotalFavoriteCount(userId)
