@@ -1,7 +1,6 @@
 Name: Favoritelist
 Host: 0.0.0.0
-Port: 8889
-Mode: pro
+Port: 8882
 
 FavoriteListRpc:
   Etcd:

@@ -1,14 +1,14 @@
 package jwt
 
 import (
-	"MicroTikTok/AcessData/modelVo"
+	"MicroTikTok/feed/model"
 	"fmt"
 	"testing"
 )
 
 func TestGenerateToken(t *testing.T) {
-	u := model.UserVo{
-		ID:              2,
+	u := model.User{
+		ID:              1,
 		UserName:        "ithwind",
 		Avatar:          "www.baidu.com",
 		BackgroundImage: "www.baidu.com",
@@ -20,8 +20,7 @@ func TestGenerateToken(t *testing.T) {
 }
 
 func TestParseToken(t *testing.T) {
-	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjEsImlkIjoxLCJuYW1lIjoiaXRod2luZCIsImF2YXRhciI6Ind3dy5iYWlkdS5jb20iLCJiYWNrZ3JvdW5kX2ltYWdlIjoid3d3LmJhaWR1LmNvbSIsInNpZ25hdHVyZSI6Ind3d3ciLCJzdWIiOiJJdGhXaW5kIiwiZXhwIjoxNjkyNzc3MDY4fQ.ygpX_3JVnouPwR29TzctNeNgmZLJ1r-I0-BDZPoCDLw"
-	claims, _ := ParseToken(token)
+	claims, _ := ParseToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjIsImlkIjoyLCJuYW1lIjoiMjkxMzEzNTY3MkBxcS5jb20iLCJwYXNzd29yZCI6IiIsImF2YXRhciI6ImF2YXRhciIsImJhY2tncm91bmRfaW1hZ2UiOiJiYWNrZ3JvdW5kaW1hZ2UiLCJzaWduYXR1cmUiOiLor6XnlKjmiLfku4DkuYjpg73msqHnlZnkuIsiLCJzdWIiOiJJdGhXaW5kIiwiZXhwIjoxNjkyNDcyMzY5fQ.o4C4g_uNKzvDMHvZqb2gLow4YhZCAvjTtSsuO3fJ7Lo")
 
-	fmt.Println(claims.UserVo)
+	fmt.Println(claims.User)
 }
