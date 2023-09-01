@@ -8,11 +8,11 @@ info(
 	version: "type version here"
 )
 //喜欢列表
-type FavoriteListRequest {
+type FavoritelistRequest {
 	Token  string `form:"token"`   // 用户鉴权token
 	UserID string `form:"user_id"` // 用户id
 }
-type FavoriteListResponse {
+type FavoritelistResponse {
 	StatusCode string  `json:"status_code"` // 状态码，0-成功，其他值-失败
 	StatusMsg  *string `json:"status_msg"`  // 返回状态描述
 	VideoList  []Video `json:"video_list"`  // 用户点赞视频列表
@@ -49,5 +49,5 @@ type User {
 
 service Favoritelist{
 	@handler Favoritelist
-	get /douyin/favorite/list (FavoriteListRequest) returns (FavoriteListRequest)
+	get /douyin/favorite/list (FavoritelistRequest) returns (FavoritelistRequest)
 }

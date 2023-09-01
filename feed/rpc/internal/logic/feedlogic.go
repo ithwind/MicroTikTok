@@ -41,6 +41,5 @@ func (l *FeedLogic) Feed(in *video.FeedRequest) (*video.FeedResponse, error) {
 	l.Logger.Infof("token:", &in.Token)
 	l.Logger.Info("time:", &in.LatestTime)
 	feedResp, _ = service2.NewFeedSerVice().Feed(in)
-
 	return feedResp, nil
 }

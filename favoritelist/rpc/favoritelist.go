@@ -1,7 +1,6 @@
 package main
 
 import (
-	"MicroTikTok/AcessData/mysql"
 	"flag"
 	"fmt"
 
@@ -23,7 +22,6 @@ func main() {
 	flag.Parse()
 
 	var c config.Config
-	mysql.Init()
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
 

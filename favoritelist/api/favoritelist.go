@@ -1,7 +1,6 @@
 package main
 
 import (
-	"MicroTikTok/AcessData/mysql"
 	"flag"
 	"fmt"
 
@@ -17,8 +16,6 @@ var configFile = flag.String("f", "etc/favoritelist.yaml", "the config file")
 
 func main() {
 	flag.Parse()
-
-	mysql.Init()
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
