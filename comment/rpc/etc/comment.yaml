@@ -1,0 +1,7 @@
+Name: commentRpc
+ListenOn: 0.0.0.0:9086
+Mode: pro
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: commentRpc

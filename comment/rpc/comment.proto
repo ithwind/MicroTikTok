@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package comment;
+
+option go_package = "./comment";
+
+message Comment {
+  int64 id  = 1;
+  User user = 2;
+  string content = 3;
+  string createAt = 4;
+}
+
+message User {
+  int64 id = 1; // 用户id
+  string name = 2; // 用户名称
+  optional int64 follow_count = 3; // 关注总数
+  optional int64 follower_count = 4; // 粉丝总数
+  bool is_follow = 5; // true-已关注，false-未关注
+  optional string avatar = 6; //用户头像
+  optional string background_image = 7; //用户个人页顶部大图
+  optional string signature = 8; //个人简介
+  optional int64 total_favorited = 9; //获赞数量
+  optional int64 work_count = 10; //作品数量
+  optional int64 favorite_count = 11; //点赞数量
+}
+
+message comment_list_req {
+  string token   = 1;
+  string videoId = 2;
+}
+
+message comment_list_resp {
+  repeated Comment comment_list = 1;
+}
+
+message comment_action_req {
+  string token   = 1;
+  string videoId = 2;
+  optional string comment_text = 3;
+  optional int64 comment_id = 4;
+}
+
+message comment_action_resp {
+  Comment comment = 1;
+
+}
+
+service CommentAction {
+  rpc CommentList (comment_list_req) returns (comment_list_resp);
+  rpc CommentAction (comment_action_req) returns (comment_action_resp);
+}

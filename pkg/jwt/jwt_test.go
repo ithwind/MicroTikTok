@@ -8,7 +8,7 @@ import (
 
 func TestGenerateToken(t *testing.T) {
 	u := model.UserVo{
-		ID:              2,
+		ID:              1,
 		UserName:        "ithwind",
 		Avatar:          "www.baidu.com",
 		BackgroundImage: "www.baidu.com",

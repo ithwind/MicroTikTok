@@ -9,3 +9,5 @@ const DefaultLatestTime int64 = 0
 const ChatTableName = "chat_messages"
 const StatusHttpOk = 0
 const StatusHttpFail = -1
+const DefaultCommentIDString string = "0"
+const DefaultCommentIDInt int64 = 0

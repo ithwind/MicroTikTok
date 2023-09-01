@@ -1,4 +1,5 @@
 syntax = "proto3";
+
 package favorite;
 
 option go_package = "./favorite";
